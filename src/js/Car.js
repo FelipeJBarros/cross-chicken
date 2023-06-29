@@ -13,7 +13,7 @@ class Car {
     move(delta) {
         this.x += this.speed * this.dir * delta;
         if (
-            this.x >= canvas.clientWidth + this.width ||
+            this.x >= World.canvas.clientWidth + this.width ||
             this.x <= -this.width * 2
         ) {
             if (Math.random() >= .5) {
@@ -32,7 +32,7 @@ class Car {
 
         let sprt_direction = this.dir > 0 ? 0 : 1
 
-        canvasContext.drawImage(
+        World.canvasContext.drawImage(
             carSprite,
             this.currentColor*this.width, sprt_direction*this.height,
             this.width, this.height,

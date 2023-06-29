@@ -1,17 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cross Chicken</title>
     <link rel="stylesheet" href="src/styles/main.css">
 </head>
+
 <body>
-    <canvas id="game" width="800" height="600"></canvas>
+    <canvas id="game" width="800" height="640"></canvas>
+
     <script src="src/js/utils.js"></script>
     <script src="src/js/KeyboardInput.js"></script>
-    <script src="src/js/Chicken.js"></script>
+    <script src="src/js/GamepadInputs.js"></script>
+    <script src="src/js/Chicken/physics.js"></script>
+    <script src="src/js/Chicken/index.js"></script>
     <script src="src/js/Car.js"></script>
-    <script src="src/js/main.js"></script>
+    <script src="src/js/World.js"></script>
+
+    <script>
+        window.onload = function () {
+            var world = new World();
+        }	
+    </script>
 </body>
+
 </html>

@@ -1,10 +1,12 @@
 class Chicken {
-    constructor(x, y, spd, size) {
+    constructor(x, y, spd, size, physicComponent = null) {
         this.x = x;
         this.y = y;
         this.spd = spd;
         this.size = size;
         this.currentDirection = 'up'
+
+        this.physicComponent = physicComponent;
     }
 
     verifyColisionWith(entity) {
@@ -38,7 +40,7 @@ class Chicken {
                 spriteDirection = 3;
                 break;
         }
-        canvasContext.drawImage(
+        World.canvasContext.drawImage(
             chickenSprite,
             spriteDirection*this.size, 0*this.size,
             this.size, this.size,
@@ -48,23 +50,6 @@ class Chicken {
     }
 
     move(delta) {
-        if (KeyboardInput.movingRight) {
-            this.x += this.spd * delta;
-            this.currentDirection = 'right'
-        } else if (KeyboardInput.movingLeft) {
-            this.x -= this.spd * delta;
-            this.currentDirection = 'left'
-        } else if (KeyboardInput.movingUp) {
-            this.y -= this.spd * delta;
-            this.currentDirection = 'up'
-        } else if (KeyboardInput.movingDown) {
-            this.y += this.spd * delta;
-            this.currentDirection = 'down'
-        }
-
-        if (this.x >= canvas.clientWidth - this.size) this.x = canvas.clientWidth - this.size
-        if (this.x <= 0) this.x = 0
-        if (this.y >= canvas.clientHeight - this.size) this.y = canvas.clientHeight - this.size
-        if (this.y <= 0) this.y = 0
+        if(this.physicComponent) this.physicComponent.move(this, delta);
     }
 }

@@ -1,7 +1,8 @@
 # Coisas a se fazer:
 
 - Aplicar padrões:
-    - Update
     - Command
     - Component
     - ...
+
+- Ajustar techos repetidos em funções reutilizaveis
