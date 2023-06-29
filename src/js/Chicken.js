@@ -21,25 +21,30 @@ class Chicken {
     }
 
     draw() {
-        drawRect(this.x, this.y, this.size, this.size, '#FCFDFD')
+        let chickenSprite = new Image();
+        chickenSprite.src = '../../assets/chicken-sprt.png'
+        let spriteDirection = 0;
         switch (this.currentDirection) {
             case 'up':
-                drawRect(this.x + 10, this.y, 10, 30, '#FF223D')
-                drawRect(this.x + 7.5, this.y - 5, 15, 5, '#FF3')
+                spriteDirection = 0;
                 break;
             case 'down':
-                drawRect(this.x + 10, this.y, 10, 30, '#FF223D')
-                drawRect(this.x + 7.5, this.y + this.size, 15, 5, '#FF3')
+                spriteDirection = 1;
                 break;
             case 'right':
-                drawRect(this.x, this.y + 10, 30, 10, '#FF223D')
-                drawRect(this.x + this.size, this.y + 7.5, 5, 15, '#FF3')
+                spriteDirection = 2;
                 break;
             case 'left':
-                drawRect(this.x, this.y + 10, 30, 10, '#FF223D')
-                drawRect(this.x - 5, this.y + 7.5, 5, 15, '#FF3')
+                spriteDirection = 3;
                 break;
         }
+        canvasContext.drawImage(
+            chickenSprite,
+            spriteDirection*this.size, 0*this.size,
+            this.size, this.size,
+            this.x, this.y,
+            this.size, this.size
+        )
     }
 
     move(delta) {

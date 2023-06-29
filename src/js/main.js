@@ -8,8 +8,8 @@ let timeStep = 1000/FPS;
 let lastTime = 0, FPSCounter = 0;
 let delta = 0;
 
-const chicken = new Chicken(385, 560, .2, 30);
-const car = new Car(200, 150, .8, 160, 80, '#A31000');
+const chicken = new Chicken(385, 560, .15, 30);
+const car = new Car(200, 150, 1, 160, 80);
 
 const entities = [car, chicken]
 
