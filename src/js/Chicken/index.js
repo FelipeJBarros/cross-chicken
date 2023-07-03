@@ -16,9 +16,28 @@ class Chicken {
             this.y < entity.y + entity.height &&
             this.y + this.size > entity.y
         ) {
-            this.x = 385;
-            this.y = 560
-            this.currentDirection = 'up'
+            if (entity instanceof Car) {
+                this.x = 385;
+                this.y = 600
+                this.currentDirection = 'up'
+            }
+
+            if (entity instanceof BlockGarden) {
+                switch (this.currentDirection) {
+                    case 'left':
+                        this.x = entity.x + entity.width;
+                        break;
+                    case 'right':
+                        this.x = entity.x - this.size;
+                        break;
+                    case 'up':
+                        this.y = entity.y + entity.height;
+                        break;
+                    case 'down':
+                        this.y = entity.y - this.size;
+                        break;
+                }
+            }
         }
     }
 
@@ -42,7 +61,7 @@ class Chicken {
         }
         World.canvasContext.drawImage(
             chickenSprite,
-            spriteDirection*this.size, 0*this.size,
+            spriteDirection * this.size, 0 * this.size,
             this.size, this.size,
             this.x, this.y,
             this.size, this.size
@@ -50,6 +69,6 @@ class Chicken {
     }
 
     move(delta) {
-        if(this.physicComponent) this.physicComponent.move(this, delta);
+        if (this.physicComponent) this.physicComponent.move(this, delta);
     }
 }

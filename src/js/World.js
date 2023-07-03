@@ -2,6 +2,8 @@ class World {
     static canvas;
     static canvasContext;
 
+    static currentStage;
+
     constructor() {
         // GAME LOOP ---
         this.lag = 0;
@@ -10,13 +12,11 @@ class World {
         this.timeStep = 1000 / this.maxFPS;
 
         // ENTITIES ---
-        this.chicken = new Chicken(
-            385, 560, .15, 30,
-            new ChickenPhysics()
-        );
-        this.car = new Car(200, 150, 1, 160, 80);
-
-        this.entities = [this.chicken, this.car]
+        this.currentStage = 0
+        this.MAX_STAGE = stagesData.length;
+        this.stages = stagesData.map((data) => (
+            new Stage(this, data)
+        ))
 
         // INITIALIZATION ---
         World.canvas = document.getElementById('game')
@@ -37,26 +37,39 @@ class World {
     }
 
     move = (delta) => {
-        this.entities.forEach(entity => entity.move(delta))
-        this.chicken.verifyColisionWith(this.car);
+        let currentStageObj = this.stages[this.currentStage]
+        currentStageObj.move(delta);
+
+        if (
+            currentStageObj.player.y <= 0 &&
+            this.currentStage + 1 < this.MAX_STAGE
+        ) {
+            this.currentStage++;
+            console.log('passou de fase')
+        }
+
+        // this.entities.forEach(entity => entity.move(delta))
+        // this.chicken.verifyColisionWith(this.car);
     }
 
     draw = () => {
-        // Render World
-        drawRect(0, 0, World.canvas.clientWidth, World.canvas.clientHeight, '#333')
-        drawRect(0, 0, World.canvas.clientWidth, 80, '#6D5D6E')
+        this.stages[this.currentStage].draw();
 
-        World.canvasContext.setLineDash([60, 30]);
-        drawLine(
-            [0, World.canvas.clientHeight / 2 - 5],
-            [World.canvas.clientWidth, World.canvas.clientHeight / 2 - 5],
-            10, '#E7B10A'
-        )
+        // // Render World
+        // drawRect(0, 0, World.canvas.clientWidth, World.canvas.clientHeight, '#333')
+        // drawRect(0, 0, World.canvas.clientWidth, 80, '#6D5D6E')
 
-        drawRect(0, World.canvas.clientHeight - 80, World.canvas.clientWidth, 80, '#6D5D6E')
+        // World.canvasContext.setLineDash([60, 30]);
+        // drawLine(
+        //     [0, World.canvas.clientHeight / 2 - 5],
+        //     [World.canvas.clientWidth, World.canvas.clientHeight / 2 - 5],
+        //     10, '#E7B10A'
+        // )
 
-        // Render entities
-        this.entities.forEach(entity => entity.draw())
+        // drawRect(0, World.canvas.clientHeight - 80, World.canvas.clientWidth, 80, '#6D5D6E')
+
+        // // Render entities
+        // this.entities.forEach(entity => entity.draw())
     }
 
     mainLoop = (timeStamp) => {
