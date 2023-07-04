@@ -40,46 +40,27 @@ class World extends Observer {
         this.playerController.setCommand('up', new ChickenUpCommand(this.player, this.timeStep))
         this.playerController.setCommand('down', new ChickenDownCommand(this.player, this.timeStep))
 
-        document.addEventListener('keydown', (event) => {
-            if (this.gameStatus !== 'running') return;
-            switch (event.key) {
-                case 'ArrowUp':
-                    this.playerController.execute('up');
-                    break;
-                case 'ArrowDown':
-                    this.playerController.execute('down');
-                    break;
-                case 'ArrowRight':
-                    this.playerController.execute('right');
-                    break;
-                case 'ArrowLeft':
-                    this.playerController.execute('left');
-                    break;
+        document.addEventListener(
+            'keydown',
+            (event) => {
+                if(this.gameStatus !== 'running') return;
+                KeyboardInput.onKeyPressed(event, this.playerController)
             }
-        })
+        )
 
-        document.addEventListener('keyup', (event) => {
-            if (this.gameStatus !== 'running') return;
-            switch (event.key) {
-                case 'ArrowUp':
-                    this.playerController.undo('up');
-                    break;
-                case 'ArrowDown':
-                    this.playerController.undo('down');
-                    break;
-                case 'ArrowRight':
-                    this.playerController.undo('right');
-                    break;
-                case 'ArrowLeft':
-                    this.playerController.undo('left');
-                    break;
+        document.addEventListener(
+            'keyup',
+            (event) => {
+                if(this.gameStatus !== 'running') return;
+                KeyboardInput.onKeyReleased(event, this.playerController)
             }
-        })
-
+        )
+        
         window.addEventListener(
             'gamepadconnected',
             (event) => GamepadInput.onGamepadConnection(event)
         )
+        
         window.addEventListener(
             'gamepaddisconnected',
             (event) => GamepadInput.onGamepadDesconnection(event)

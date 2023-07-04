@@ -4,41 +4,37 @@ class KeyboardInput {
     static movingRight = false;
     static movingLeft = false;
 
-    static onKeyPressed = (event) => {
+    static onKeyPressed = (event, controller) => {
         switch (event.key) {
-            case 'ArrowRight':
-                this.movingRight = true;
-                break;
-            case 'ArrowLeft':
-                this.movingLeft = true;
-                break;
             case 'ArrowUp':
-                this.movingUp = true;
+                controller.execute('up');
                 break;
             case 'ArrowDown':
-                this.movingDown = true;
+                controller.execute('down');
                 break;
-            default:
-                return;
+            case 'ArrowRight':
+                controller.execute('right');
+                break;
+            case 'ArrowLeft':
+                controller.execute('left');
+                break;
         }
     }
 
-    static onKeyReleased = (event) => {
+    static onKeyReleased = (event, controller) => {
         switch (event.key) {
-            case 'ArrowRight':
-                this.movingRight = false;
-                break;
-            case 'ArrowLeft':
-                this.movingLeft = false;
-                break;
             case 'ArrowUp':
-                this.movingUp = false;
+                controller.undo('up');
                 break;
             case 'ArrowDown':
-                this.movingDown = false;
+                controller.undo('down');
                 break;
-            default:
-                return;
+            case 'ArrowRight':
+                controller.undo('right');
+                break;
+            case 'ArrowLeft':
+                controller.undo('left');
+                break;
         }
     }
 }
