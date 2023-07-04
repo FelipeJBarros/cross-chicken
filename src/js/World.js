@@ -1,6 +1,7 @@
 class World extends Observer {
     static canvas;
     static canvasContext;
+
     constructor() {
         super();
 
@@ -10,12 +11,20 @@ class World extends Observer {
         this.maxFPS = 60;
         this.timeStep = 1000 / this.maxFPS;
 
+        // Player Entity
+        this.player = new Chicken(
+            385, 580, 0.5, 30,
+            new ChickenPhysics(),
+            new ChickenGraphics(),
+            this
+        )
+
         // STAGES ---
         this.currentStage = 0
         this.gameStatus = 'running';
         this.MAX_STAGE = stagesData.length;
         this.stages = stagesData.map((data) => (
-            new Stage(this, data)
+            new Stage(this, data, this.player)
         ))
 
         // INITIALIZATION ---
@@ -24,8 +33,49 @@ class World extends Observer {
         requestAnimationFrame(this.mainLoop.bind(this))
 
         // - controls ---
-        window.onkeydown = KeyboardInput.onKeyPressed;
-        window.onkeyup = KeyboardInput.onKeyReleased;
+        this.playerController = new ChickenController(this.player);
+
+        this.playerController.setCommand('right', new ChickenRightCommand(this.player, this.timeStep))
+        this.playerController.setCommand('left', new ChickenLeftCommand(this.player, this.timeStep))
+        this.playerController.setCommand('up', new ChickenUpCommand(this.player, this.timeStep))
+        this.playerController.setCommand('down', new ChickenDownCommand(this.player, this.timeStep))
+
+        document.addEventListener('keydown', (event) => {
+            if (this.gameStatus !== 'running') return;
+            switch (event.key) {
+                case 'ArrowUp':
+                    this.playerController.execute('up');
+                    break;
+                case 'ArrowDown':
+                    this.playerController.execute('down');
+                    break;
+                case 'ArrowRight':
+                    this.playerController.execute('right');
+                    break;
+                case 'ArrowLeft':
+                    this.playerController.execute('left');
+                    break;
+            }
+        })
+
+        document.addEventListener('keyup', (event) => {
+            if (this.gameStatus !== 'running') return;
+            switch (event.key) {
+                case 'ArrowUp':
+                    this.playerController.undo('up');
+                    break;
+                case 'ArrowDown':
+                    this.playerController.undo('down');
+                    break;
+                case 'ArrowRight':
+                    this.playerController.undo('right');
+                    break;
+                case 'ArrowLeft':
+                    this.playerController.undo('left');
+                    break;
+            }
+        })
+
         window.addEventListener(
             'gamepadconnected',
             (event) => GamepadInput.onGamepadConnection(event)
@@ -59,6 +109,7 @@ class World extends Observer {
             case EVENTS.PLAYER_HIT_TOP_WALL:
                 if (this.currentStage + 1 < this.MAX_STAGE) {
                     this.currentStage++;
+                    this.stages[this.currentStage].setSpawnPointForStage()
                 }
                 break;
             default:
@@ -79,7 +130,7 @@ class World extends Observer {
         this.lag += timeStamp - this.lastFrameTimeMs;
         this.lastFrameTimeMs = timeStamp;
 
-        GamepadInput.ControllerInputs();
+        GamepadInput.ControllerInputs(this.playerController);
 
         while (this.lag >= this.timeStep) {
             this.move(this.timeStep);

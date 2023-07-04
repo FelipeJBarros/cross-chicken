@@ -1,15 +1,15 @@
 class ChickenPhysics {
     move(entity, delta) {
-        if (KeyboardInput.movingRight || GamepadInput.movingRight) {
+        if (entity.right) {
             entity.x += entity.spd * delta;
             entity.currentDirection = 'right'
-        } else if (KeyboardInput.movingLeft || GamepadInput.movingLeft) {
+        } else if (entity.left) {
             entity.x -= entity.spd * delta;
             entity.currentDirection = 'left'
-        } else if (KeyboardInput.movingUp || GamepadInput.movingUp) {
+        } else if (entity.up) {
             entity.y -= entity.spd * delta;
             entity.currentDirection = 'up'
-        } else if (KeyboardInput.movingDown || GamepadInput.movingDown) {
+        } else if (entity.down) {
             entity.y += entity.spd * delta;
             entity.currentDirection = 'down'
         }

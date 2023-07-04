@@ -16,6 +16,11 @@ class Chicken extends Subject {
         this.physicComponent = physicComponent;
         this.graphicComponent = graphicComponent;
 
+        this.up = false;
+        this.down = false;
+        this.left = false;
+        this.right = false;
+
         this.addObserver(world)
     }
 

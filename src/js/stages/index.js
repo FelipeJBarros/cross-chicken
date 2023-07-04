@@ -1,19 +1,16 @@
 class Stage {
-    constructor(world, data) {
+    constructor(world, data, player) {
         this.data = data;
         this.world = world;
-
-        this.player = new Chicken(
-            this.data.player.initialPosition.x,
-            this.data.player.initialPosition.y,
-            .4, 30, 
-            new ChickenPhysics(),
-            new ChickenGraphics(),
-            world,
-        )
+        this.player = player;
 
         this.props = [...this.data.props, this.player]
         this.decorations = this.data.decorations 
+    }
+
+    setSpawnPointForStage(x, y) {
+        this.player.x = this.data.player.initialPosition.x;
+        this.player.y = this.data.player.initialPosition.y;
     }
 
     move(delta) {
