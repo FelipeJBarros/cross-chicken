@@ -13,6 +13,6 @@ class BlockGarden {
 
     draw() {
         drawRect(this.x, this.y, this.width, this.height, '#FCFDFD')
-        drawRect(this.x + 5, this.y + 5, this.width - 10, this.height - 10, 'green')
+        drawRect(this.x + 5, this.y + 5, this.width - 10, this.height - 10, '#39693B')
     }
 }

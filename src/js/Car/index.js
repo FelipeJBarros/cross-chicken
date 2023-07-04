@@ -11,21 +11,8 @@ class Car {
         this.physicComponent = physicComponent
     }
 
-    move(delta) {
-        if(this.physicComponent) this.physicComponent.move(this, delta);
-        // this.x += this.speed * this.dir * delta;
-        // if (
-        //     this.x >= World.canvas.clientWidth + this.width ||
-        //     this.x <= -this.width * 2
-        // ) {
-        //     if (Math.random() >= .5) {
-        //         this.x = -this.width
-        //     } else {
-        //         this.dir *= -1;
-        //     }
-        //     this.y = getRandom(430, 90);
-        //     this.currentColor = getRandom(4)
-        // }
+    move(delta, world) {
+        if(this.physicComponent) this.physicComponent.move(this, delta, world);
     }
 
     draw() {
@@ -33,6 +20,10 @@ class Car {
         carSprite.src = '../../assets/car-sprt.png'
 
         let sprt_direction = this.dir > 0 ? 0 : 1
+
+        if(this.x >= World.canvas.clientWidth || this.x <= -this.width) {
+            this.currentColor = getRandom(4)
+        }
 
         World.canvasContext.drawImage(
             carSprite,

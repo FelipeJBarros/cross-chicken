@@ -21,6 +21,9 @@ class ChickenPhysics {
         if (entity.y >= World.canvas.clientHeight - entity.size) {
             entity.y = World.canvas.clientHeight - entity.size
         }
-        if (entity.y <= 0) entity.y = 0
+        if (entity.y <= 0) {
+            entity.y = 0
+            entity.notify(EVENTS.PLAYER_HIT_TOP_WALL)
+        }
     }
 }

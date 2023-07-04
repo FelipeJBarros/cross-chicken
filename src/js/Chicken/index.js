@@ -1,12 +1,22 @@
-class Chicken {
-    constructor(x, y, spd, size, physicComponent = null) {
+class Chicken extends Subject {
+    constructor(
+        x, y, spd, size,
+        physicComponent = null,
+        graphicComponent = null,
+        world
+    ) {
+        super();
         this.x = x;
         this.y = y;
         this.spd = spd;
+        this.dashSpd = 0;
         this.size = size;
         this.currentDirection = 'up'
 
         this.physicComponent = physicComponent;
+        this.graphicComponent = graphicComponent;
+
+        this.addObserver(world)
     }
 
     verifyColisionWith(entity) {
@@ -17,9 +27,7 @@ class Chicken {
             this.y + this.size > entity.y
         ) {
             if (entity instanceof Car) {
-                this.x = 385;
-                this.y = 600
-                this.currentDirection = 'up'
+                super.notify(EVENTS.PLAYER_HIT_CAR)
             }
 
             if (entity instanceof BlockGarden) {
@@ -42,30 +50,7 @@ class Chicken {
     }
 
     draw() {
-        let chickenSprite = new Image();
-        chickenSprite.src = '../../assets/chicken-sprt.png'
-        let spriteDirection = 0;
-        switch (this.currentDirection) {
-            case 'up':
-                spriteDirection = 0;
-                break;
-            case 'down':
-                spriteDirection = 1;
-                break;
-            case 'right':
-                spriteDirection = 2;
-                break;
-            case 'left':
-                spriteDirection = 3;
-                break;
-        }
-        World.canvasContext.drawImage(
-            chickenSprite,
-            spriteDirection * this.size, 0 * this.size,
-            this.size, this.size,
-            this.x, this.y,
-            this.size, this.size
-        )
+        if(this.graphicComponent) this.graphicComponent.draw(this)
     }
 
     move(delta) {

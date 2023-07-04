@@ -1,18 +1,18 @@
-class World {
+class World extends Observer {
     static canvas;
     static canvasContext;
-
-    static currentStage;
-
     constructor() {
+        super();
+
         // GAME LOOP ---
         this.lag = 0;
         this.lastFrameTimeMs = 0;
         this.maxFPS = 60;
         this.timeStep = 1000 / this.maxFPS;
 
-        // ENTITIES ---
+        // STAGES ---
         this.currentStage = 0
+        this.gameStatus = 'running';
         this.MAX_STAGE = stagesData.length;
         this.stages = stagesData.map((data) => (
             new Stage(this, data)
@@ -37,39 +37,35 @@ class World {
     }
 
     move = (delta) => {
+        if (this.gameStatus != 'running') return;
         let currentStageObj = this.stages[this.currentStage]
         currentStageObj.move(delta);
-
-        if (
-            currentStageObj.player.y <= 0 &&
-            this.currentStage + 1 < this.MAX_STAGE
-        ) {
-            this.currentStage++;
-            console.log('passou de fase')
-        }
-
-        // this.entities.forEach(entity => entity.move(delta))
-        // this.chicken.verifyColisionWith(this.car);
     }
 
     draw = () => {
         this.stages[this.currentStage].draw();
+        if (this.gameStatus === 'stopped') {
+            drawRect(0, 0, World.canvas.width, World.canvas.height, "#222A")
+            drawText("GAME OVER!", 100, 300, '100px arial', 4)
+            drawText("> Pressione F5 para reiniciar <", 200, 400, '30px arial', 1)
+        }
+    }
 
-        // // Render World
-        // drawRect(0, 0, World.canvas.clientWidth, World.canvas.clientHeight, '#333')
-        // drawRect(0, 0, World.canvas.clientWidth, 80, '#6D5D6E')
+    onNotify(ev) {
+        switch (ev) {
+            case EVENTS.PLAYER_HIT_CAR:
+                this.gameStatus = 'stopped'
+                break;
+            case EVENTS.PLAYER_HIT_TOP_WALL:
+                if (this.currentStage + 1 < this.MAX_STAGE) {
+                    this.currentStage++;
+                }
+                break;
+            default:
+                break;
 
-        // World.canvasContext.setLineDash([60, 30]);
-        // drawLine(
-        //     [0, World.canvas.clientHeight / 2 - 5],
-        //     [World.canvas.clientWidth, World.canvas.clientHeight / 2 - 5],
-        //     10, '#E7B10A'
-        // )
+        }
 
-        // drawRect(0, World.canvas.clientHeight - 80, World.canvas.clientWidth, 80, '#6D5D6E')
-
-        // // Render entities
-        // this.entities.forEach(entity => entity.draw())
     }
 
     mainLoop = (timeStamp) => {
