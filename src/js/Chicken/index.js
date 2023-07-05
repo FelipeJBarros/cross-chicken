@@ -3,7 +3,6 @@ class Chicken extends Subject {
         x, y, spd, size,
         physicComponent = null,
         graphicComponent = null,
-        world
     ) {
         super();
         this.x = x;
@@ -20,8 +19,6 @@ class Chicken extends Subject {
         this.down = false;
         this.left = false;
         this.right = false;
-
-        this.addObserver(world)
     }
 
     verifyColisionWith(entity) {

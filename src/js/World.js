@@ -16,8 +16,9 @@ class World extends Observer {
             385, 580, 0.5, 30,
             new ChickenPhysics(),
             new ChickenGraphics(),
-            this
         )
+
+        this.player.addObserver(this);
 
         // STAGES ---
         this.currentStage = 0
